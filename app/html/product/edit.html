@@ -1,0 +1,20 @@
+<!-- edit template-->
+<html>
+<head>
+    <title>Edit</title>
+</head>
+<body>
+    <form action="/product/save/{{.ID}}" method="POST">
+        <input type="hidden" name="id" value="{{.ID}}">
+        <label for="name">Name</label>
+        <input type="text" name="name" value="{{.Name}}">
+        <label for="price">Price</label>
+        <input type="text" name="price" value="{{.Price}}">
+        <label for="description">Description</label>
+        <input type="text" name="description" value="{{.Description}}">
+        <label for="image">Image</label>
+        <input type="text" name="image" value="{{.Image}}">
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

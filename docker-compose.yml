@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  app:
+    image: golang:latest
+    container_name: app
+    tty: true
+    volumes:
+      - ./app:/go/src/app
+    working_dir: /go/src/app
+    ports:
+    - "8080:8080"
+  db:
+    image: mysql:latest
+    container_name: online_shop_db
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: online_shop
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: "passwd"
+    volumes:
+      - mysql:/var/lib/mysql
+      - .dockerdev/mysql-initdb.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 5s
+    ports:
+      - 3316:3306
+volumes:
+  mysql:

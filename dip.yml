@@ -1,0 +1,28 @@
+version: '7.1'
+
+environment:
+  COMPOSE_EXT: development
+
+compose:
+  files:
+    - docker/docker-compose.yml
+  project_name: online_shop
+
+interaction:
+  shell:
+    description: Open the Bash shell in app's container
+    service: app
+    command: bash
+    compose:
+      run_options: [no-deps]
+  gorun:
+    description: Run Golang command
+    service: app
+    command: exec -it app
+  mysql:
+    description: Run mysql console
+    service: db
+    command: mysql -h db -u root -p
+
+provision:
+  - dip compose down --volumes

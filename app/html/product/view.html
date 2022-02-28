@@ -1,0 +1,41 @@
+<!-- view template-->
+<html>
+<head>
+    <title>View</title>
+</head>
+<body>
+    <a href="new">new</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>DeletedAt</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Price}}</td>
+                    <td>{{.Description}}</td>
+                    <td>{{.Image}}</td>
+                    <td>{{.CreatedAt}}</td>
+                    <td>{{.UpdatedAt}}</td>
+                    <td>{{.DeletedAt}}</td>
+                    <td><a href="/product/edit/{{.ID}}">edit</a></td>
+                    <td><a href="/product/delete/{{.ID}}">delete</a></td>
+                </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+</html>

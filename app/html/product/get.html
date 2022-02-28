@@ -1,0 +1,38 @@
+<!-- get template-->
+<html>
+<head>
+    <title>{{.Name}}</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>DeletedAt</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{.ID}}</td>
+                <td>{{.Name}}</td>
+                <td>{{.Price}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.Image}}</td>
+                <td>{{.CreatedAt}}</td>
+                <td>{{.UpdatedAt}}</td>
+                <td>{{.DeletedAt}}</td>
+                <td><a href="/product/edit/{{.ID}}">edit</a></td>
+                <td><a href="/product/delete/{{.ID}}">delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
