@@ -1,39 +1,15 @@
 package product
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"html/template"
-	"time"
 	"strconv"
 	"example/online_shop/database"
-	//"encoding/json"
+
+	"github.com/gorilla/mux"
 )
 
-//make type product struct
-type Product struct {
-	ID		  int  `json:"id" `
-	Name	  string  `json:"name" `
-	Price	  int  `json:"price" `
-	Description string  `json:"description" `
-	Image	  string  `json:"image" `
-	CreatedAt time.Time  `json:"created_at" `
-	UpdatedAt time.Time  `json:"updated_at" `
-	DeletedAt *time.Time  `json:"deleted_at" `
-}
-
-// Insert a record into the database.
-func insertRecord(p Product) {
-	db := database.ConnectDatabase()
-	// Insert a record.
-	fmt.Printf("%+v\n", p)
-	_, err := db.Exec("INSERT INTO product (name, price, description, image) VALUES (?, ?, ?, ?)", p.Name, p.Price, p.Description, p.Image)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-}
 
 // Viewhandler
 func Viewhandler(w http.ResponseWriter, r *http.Request){
@@ -61,13 +37,7 @@ func Viewhandler(w http.ResponseWriter, r *http.Request){
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// When passing in json format
-	//bytes, err := json.Marshal(products)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
+	
 	defer db.Close()
 
 	t.Execute(w, products)
@@ -109,13 +79,11 @@ func SaveHandler(w http.ResponseWriter, r *http.Request){
 	// Insert a record.
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	if id == "" {
-		p := Product{
-			Name: r.FormValue("name"),
-			Price: price,
-			Description: r.FormValue("description"),
-			Image: r.FormValue("image"),
+		// Insert a record
+		_, err := db.Exec("INSERT INTO product (name, price, description, image) VALUES (?, ?, ?, ?)", r.FormValue("name"), price, r.FormValue("description"), r.FormValue("image"))
+		if err != nil {
+			log.Fatal(err)
 		}
-		insertRecord(p)
 	} else {
 		// Update a record.
 		_, err := db.Exec("UPDATE product SET name = ?, price = ?, description = ?, image = ? WHERE id = ?", r.FormValue("name"), r.FormValue("price"), r.FormValue("description"), r.FormValue("image"), id)
@@ -182,7 +150,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request){
 	}
 
 	// Render the view.
-	t, err := template.ParseFiles("html/product/get.html")
+	t, err := template.ParseFiles("html/product/get.html", "html/template/_head.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -191,3 +159,14 @@ func GetHandler(w http.ResponseWriter, r *http.Request){
 
 	t.Execute(w, p)
 }
+
+// Call Handlers
+func CallHandlers(router *mux.Router) {
+	router.HandleFunc("/product/view", Viewhandler)
+	router.HandleFunc("/product/edit/", EditHandler)
+	router.HandleFunc("/product/save/", SaveHandler)
+	router.HandleFunc("/product/delete/", DeleteHandler)
+	router.HandleFunc("/product/new", CreateHandler)
+	router.HandleFunc("/product/", GetHandler)
+}
+	

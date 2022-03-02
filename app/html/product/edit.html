@@ -4,6 +4,7 @@
     <title>Edit</title>
 </head>
 <body>
+    <a href="#" onclick="history.back(-1);return false;">戻る</a>
     <form action="/product/save/{{.ID}}" method="POST">
         <input type="hidden" name="id" value="{{.ID}}">
         <label for="name">Name</label>

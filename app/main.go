@@ -5,16 +5,16 @@ package main
 import (
 	"net/http"
 	"example/online_shop/go/product"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	//Call Handler
-	http.HandleFunc("/product/view", product.Viewhandler)
-	http.HandleFunc("/product/new", product.CreateHandler)
-	http.HandleFunc("/product/", product.GetHandler)
-	http.HandleFunc("/product/edit/", product.EditHandler)
-	http.HandleFunc("/product/save/", product.SaveHandler)
-	http.HandleFunc("/product/delete/", product.DeleteHandler)
+	router := mux.NewRouter()
 
-	http.ListenAndServe(":8080", nil)
+	//Call Handler
+	product.CallHandlers(router)
+	product.CallApiHandlers(router)
+
+	http.ListenAndServe(":8080", router)
 }

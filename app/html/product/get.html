@@ -1,9 +1,8 @@
 <!-- get template-->
 <html>
-<head>
-    <title>{{.Name}}</title>
-</head>
+{{template "head" .}}
 <body>
+    <a href="#" onclick="history.back(-1);return false;">戻る</a>
     <table>
         <thead>
             <tr>
