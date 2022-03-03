@@ -6,13 +6,13 @@ import (
 	"example/online_shop/database"
 	"encoding/json"
 	"time"
+	"database/sql"
 
 	"github.com/gorilla/mux"
 )
 
-// Restful API Handler for GET/:id
-func GetApiHandler(w http.ResponseWriter, r *http.Request) {
-	db := database.ConnectDatabase()
+// Restful API Handler for GET/:id return
+func GetApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
 	// Get ID from URL
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -20,22 +20,10 @@ func GetApiHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the record.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
 
-	// Create a product struct.
-	var p Product
 	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
 		log.Fatal(err)
 	}
-	// Convert product to JSON
-	json, err := json.Marshal(p)
-	if err != nil {
-		log.Println(err)
-		return
-	}
 
-	// Write JSON to response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(json)
 }
 
 // Restful API Handler for GET all
@@ -73,11 +61,10 @@ func GetAllApiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Restful API Handler for POST
-func PostApiHandler(w http.ResponseWriter, r *http.Request) {
-	db := database.ConnectDatabase()
+func PostApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
 	// Post the record. read the body
 	decoder := json.NewDecoder(r.Body)
-	var p Product
+
 	err := decoder.Decode(&p)
 	if err != nil {
 		log.Fatal(err)
@@ -93,33 +80,16 @@ func PostApiHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
-
-	// Convert products to JSON
-	json, err := json.Marshal(p)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	// Write JSON to response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(json)
 }
 
 // Restful API Handler for PUT/:id
-func PutApiHandler(w http.ResponseWriter, r *http.Request) {
-	db := database.ConnectDatabase()
+func PutApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
 	// Get ID from URL
 	vars := mux.Vars(r)
 	id := vars["id"]
 
 	// Read existing records.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
-
-	// Create a product struct.
-	var p Product
 	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
 		log.Fatal(err)
 	}
@@ -156,33 +126,16 @@ func PutApiHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
-
-	// Convert product to JSON
-	json, err := json.Marshal(p)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	// Write JSON to response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(json)
 }
 
 // Restful API Handler for DELETE/:id
-func DeleteApiHandler(w http.ResponseWriter, r *http.Request) {
-	db := database.ConnectDatabase()
+func DeleteApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
 	// Get ID from URL
 	vars := mux.Vars(r)
 	id := vars["id"]
 
 	// Read existing records.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
-
-	// Create a product struct.
-	var p Product
 	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
 		log.Fatal(err)
 	}
@@ -198,16 +151,43 @@ func DeleteApiHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	p.DeletedAt = &[]time.Time{time.Now()}[0]
+
+}
+
+// ApiHandler common method for base
+func ApiHandler(w http.ResponseWriter, r *http.Request) {
+	// Get the method
+	method := r.Method
+
+	// connect to database
+	db := database.ConnectDatabase()
+
+	var p Product
+	// Switch the method
+	switch method {
+	case "GET":
+		GetApiHandler(w, r, db, &p)
+	case "POST":
+		PostApiHandler(w, r, db, &p)
+	case "PUT":
+		PutApiHandler(w, r, db, &p)
+	case "DELETE":
+		DeleteApiHandler(w, r, db, &p)
+	default:
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	// close database
 	defer db.Close()
 
 	// Convert product to JSON
-	p.DeletedAt = &[]time.Time{time.Now()}[0]
 	json, err := json.Marshal(p)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
+	
 	// Write JSON to response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -217,8 +197,6 @@ func DeleteApiHandler(w http.ResponseWriter, r *http.Request) {
 // Call Handlers
 func CallApiHandlers(router *mux.Router) {
 	router.HandleFunc("/api/product", GetAllApiHandler).Methods("GET")
-	router.HandleFunc("/api/product/{id}", GetApiHandler).Methods("GET")
-	router.HandleFunc("/api/product", PostApiHandler).Methods("POST")
-	router.HandleFunc("/api/product/{id}", PutApiHandler).Methods("PUT")
-	router.HandleFunc("/api/product/{id}", DeleteApiHandler).Methods("DELETE")
+	router.HandleFunc("/api/product/{id}", ApiHandler).Methods("GET", "PUT", "DELETE")
+	router.HandleFunc("/api/product", ApiHandler).Methods("POST")
 }
