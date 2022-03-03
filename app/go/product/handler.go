@@ -47,7 +47,8 @@ func Viewhandler(w http.ResponseWriter, r *http.Request){
 func EditHandler(w http.ResponseWriter, r *http.Request){
 	db := database.ConnectDatabase()
 	// Get the id from the URL. edit/:id
-	id := r.URL.Path[len("/product/edit/"):]
+	vars := mux.Vars(r)
+	id := vars["id"]
 
 	// Get the record.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
@@ -73,7 +74,8 @@ func EditHandler(w http.ResponseWriter, r *http.Request){
 func SaveHandler(w http.ResponseWriter, r *http.Request){
 	db := database.ConnectDatabase()
 	// Get the id from the URL. edit/:id
-	id := r.URL.Path[len("/product/save/"):]
+	vars := mux.Vars(r)
+	id := vars["id"]
 
 	// When id is empty, it is a new record.
 	// Insert a record.
@@ -101,7 +103,8 @@ func SaveHandler(w http.ResponseWriter, r *http.Request){
 func DeleteHandler(w http.ResponseWriter, r *http.Request){
 	db := database.ConnectDatabase()
 	// Get the id from the URL. delete/:id
-	id := r.URL.Path[len("/product/delete/"):]
+	vars := mux.Vars(r)
+	id := vars["id"]
 
 	// Get the record.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
@@ -160,13 +163,18 @@ func GetHandler(w http.ResponseWriter, r *http.Request){
 	t.Execute(w, p)
 }
 
+func stopGoRunHandler(w http.ResponseWriter, r *http.Request) {
+	log.Fatal("Stop Go Run")
+}
+
 // Call Handlers
 func CallHandlers(router *mux.Router) {
 	router.HandleFunc("/product/view", Viewhandler)
-	router.HandleFunc("/product/edit/", EditHandler)
-	router.HandleFunc("/product/save/", SaveHandler)
-	router.HandleFunc("/product/delete/", DeleteHandler)
+	router.HandleFunc("/product/edit/{id}", EditHandler)
+	router.HandleFunc("/product/save/{id}", SaveHandler)
+	router.HandleFunc("/product/delete/{id}", DeleteHandler)
 	router.HandleFunc("/product/new", CreateHandler)
-	router.HandleFunc("/product/", GetHandler)
+	router.HandleFunc("/product/{id}", GetHandler)
+	router.HandleFunc("/product/stop", stopGoRunHandler)
 }
 	
