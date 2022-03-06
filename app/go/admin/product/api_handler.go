@@ -36,20 +36,6 @@ func putApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Produc
 	readRecord(db, p, id)
 	jsonDecode(r, p)
 
-	// Check column present or not
-	if p.Name != "" {
-		p.Name = p.Name
-	}
-	if p.Price != 0 {
-		p.Price = p.Price
-	}
-	if p.Description != "" {
-		p.Description = p.Description
-	}
-	if p.Image != "" {
-		p.Image = p.Image
-	}
-
 	updateRecord(db, p)
 }
 
