@@ -10,6 +10,7 @@ import (
 func readRecord(db *sql.DB, p *Product, id string) {
 	// Read existing records.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
+	log.Println(row)
 	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
 		log.Fatal(err)
 	}

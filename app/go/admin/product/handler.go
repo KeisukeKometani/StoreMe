@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"html/template"
 	"strconv"
-	"example/online_shop/database"
 	"database/sql"
+	"example/online_shop/database"
+	"example/online_shop/go/query"
 
 	"github.com/gorilla/mux"
 )
@@ -20,18 +21,19 @@ func renderCommon(w http.ResponseWriter, r *http.Request, data interface{}, file
 	t.Execute(w, data)
 }
 
-func viewhandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product){
-	readAllRecords(db, products)
+func viewhandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products []Product){
+	query.ReadAllRecords(db, products, "product")
+	log.Println("viewhandler: %p",products)
 	renderCommon(w, r, products, "html/admin/product/view.html")
 }
 
-func getHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
-	readRecord(db, p, id)
+func getHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
+	query.ReadRecord(db, &p, id, "product")
 	renderCommon(w, r, p, "html/admin/product/get.html", "html/template/_head.html")
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
-	readRecord(db, p, id)
+func editHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
+	query.ReadRecord(db, &p, id, "product")
 	renderCommon(w, r, p, "html/admin/product/edit.html")
 }
 
@@ -53,10 +55,8 @@ func saveHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product,
 }
 
 // DeleteHandler(logic delete)
-func deleteHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
-	readRecord(db, p, id)
-	deleteRecord(db, p)
-
+func deleteHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
+	query.DeleteRecord(db, id, "product")
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }
 
@@ -83,17 +83,17 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	var products []Product
 	switch path {
 	case "view":
-		viewhandler(w, r, db, &products)
+		viewhandler(w, r, db, products)
 	case id:
-		getHandler(w, r, db, &product, id)
+		getHandler(w, r, db, product, id)
 	case "edit/"+id:
-		editHandler(w, r, db, &product, id)
+		editHandler(w, r, db, product, id)
 	case "save/"+id:
 		saveHandler(w, r, db, &product, id)
 	case "save/":
 		saveHandler(w, r, db, &product, id)
 	case "delete/"+id:
-		deleteHandler(w, r, db, &product, id)
+		deleteHandler(w, r, db, product, id)
 	case "new":
 		createHandler(w, r)
 	}
