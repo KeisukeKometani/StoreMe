@@ -6,175 +6,110 @@ import (
 	"html/template"
 	"strconv"
 	"example/online_shop/database"
+	"database/sql"
 
 	"github.com/gorilla/mux"
 )
 
-
-// Viewhandler
-func Viewhandler(w http.ResponseWriter, r *http.Request){
-	db := database.ConnectDatabase()
-	// Get all records.
-	rows, err := db.Query("SELECT * FROM product")
+func RenderCommon(w http.ResponseWriter, r *http.Request, data interface{}, fileNames ...string) {
+	t, err := template.ParseFiles(fileNames...)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
 
-	// Iterate through the result set.
-	products := []Product{}
-	for rows.Next() {
-		var p Product
-		if err := rows.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
-			log.Fatal(err)
-		}
-		//fmt.Printf("%+v\n", products)
-		products = append(products, p)
-	}
-
-	// Render the view.
-	t, err := template.ParseFiles("html/product/view.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	
-	defer db.Close()
-
-	t.Execute(w, products)
+	t.Execute(w, data)
 }
 
-// EditHandler
-func EditHandler(w http.ResponseWriter, r *http.Request){
-	db := database.ConnectDatabase()
-	// Get the id from the URL. edit/:id
-	vars := mux.Vars(r)
-	id := vars["id"]
-
-	// Get the record.
-	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
-
-	// Create a product struct.
-	var p Product
-	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
-		log.Fatal(err)
-	}
-
-	// Render the view.
-	t, err := template.ParseFiles("html/product/edit.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer db.Close()
-
-	t.Execute(w, p)
+func Viewhandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product){
+	ReadAllRecords(db, products)
+	RenderCommon(w, r, products, "html/product/view.html")
 }
 
-// SaveHandler
-func SaveHandler(w http.ResponseWriter, r *http.Request){
-	db := database.ConnectDatabase()
-	// Get the id from the URL. edit/:id
-	vars := mux.Vars(r)
-	id := vars["id"]
+func GetHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
+	ReadRecord(db, p, id)
+	RenderCommon(w, r, p, "html/product/get.html", "html/template/_head.html")
+}
 
-	// When id is empty, it is a new record.
-	// Insert a record.
+func EditHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
+	ReadRecord(db, p, id)
+	RenderCommon(w, r, p, "html/product/edit.html")
+}
+
+func SaveHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
 	price, _ := strconv.Atoi(r.FormValue("price"))
+	p.Name = r.FormValue("name")
+	p.Price = price
+	p.Description = r.FormValue("description")
+	p.Image = r.FormValue("image")
+
 	if id == "" {
-		// Insert a record
-		_, err := db.Exec("INSERT INTO product (name, price, description, image) VALUES (?, ?, ?, ?)", r.FormValue("name"), price, r.FormValue("description"), r.FormValue("image"))
-		if err != nil {
-			log.Fatal(err)
-		}
+		CreateRecord(db, p)
 	} else {
-		// Update a record.
-		_, err := db.Exec("UPDATE product SET name = ?, price = ?, description = ?, image = ? WHERE id = ?", r.FormValue("name"), r.FormValue("price"), r.FormValue("description"), r.FormValue("image"), id)
-		if err != nil {
-			log.Fatal(err)
-		}
+		p.ID, _ = strconv.Atoi(id)
+		UpdateRecord(db, p)
 	}
 
-	defer db.Close()
-	// Redirect to the view.
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }
 
 // DeleteHandler(logic delete)
-func DeleteHandler(w http.ResponseWriter, r *http.Request){
-	db := database.ConnectDatabase()
-	// Get the id from the URL. delete/:id
-	vars := mux.Vars(r)
-	id := vars["id"]
+func DeleteHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
+	ReadRecord(db, p, id)
+	DeleteRecord(db, p)
 
-	// Get the record.
-	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
-
-	// Create a product struct.
-	var p Product
-	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
-		log.Fatal(err)
-	}
-
-	// Update the record.
-	_, err := db.Exec("UPDATE product SET deleted_at = NOW() WHERE id = ?", p.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer db.Close()
-	// Redirect to the view.
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }
 
-// CreateHandler
 func CreateHandler(w http.ResponseWriter, r *http.Request){
-	// Render the view.
-	t, err := template.ParseFiles("html/product/new.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	t.Execute(w, nil)
+	RenderCommon(w, r, nil, "html/product/new.html")
 }
 
-// GetHandler
-func GetHandler(w http.ResponseWriter, r *http.Request){
-	db := database.ConnectDatabase()
-	// Get the id from the URL. get/:id
-	id := r.URL.Path[len("/product/"):]
-
-	// Get the record.
-	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
-
-	// Create a product struct.
-	var p Product
-	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
-		log.Fatal(err)
-	}
-
-	// Render the view.
-	t, err := template.ParseFiles("html/product/get.html", "html/template/_head.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer db.Close()
-
-	t.Execute(w, p)
-}
 
 func stopGoRunHandler(w http.ResponseWriter, r *http.Request) {
 	log.Fatal("Stop Go Run")
 }
 
+// Handler common methods
+func productHandler(w http.ResponseWriter, r *http.Request) {
+	
+	path := r.URL.Path[len("/product/"):]
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+	
+	db := database.ConnectDatabase()
+
+	var product Product
+	var products []Product
+	switch path {
+	case "view":
+		Viewhandler(w, r, db, &products)
+	case "edit/"+id:
+		EditHandler(w, r, db, &product, id)
+	case "save/"+id:
+		SaveHandler(w, r, db, &product, id)
+	case "save/":
+		SaveHandler(w, r, db, &product, id)
+	case "delete/"+id:
+		DeleteHandler(w, r, db, &product, id)
+	case "new":
+		CreateHandler(w, r)
+	case id:
+		GetHandler(w, r, db, &product, id)
+	}
+
+	defer db.Close()
+}
+
 // Call Handlers
 func CallHandlers(router *mux.Router) {
-	router.HandleFunc("/product/view", Viewhandler)
-	router.HandleFunc("/product/edit/{id}", EditHandler)
-	router.HandleFunc("/product/save/{id}", SaveHandler)
-	router.HandleFunc("/product/delete/{id}", DeleteHandler)
+	router.HandleFunc("/product/view", productHandler)
+	router.HandleFunc("/product/edit/{id}", productHandler)
+	router.HandleFunc("/product/save/{id}", productHandler)
+	router.HandleFunc("/product/save/", productHandler)
+	router.HandleFunc("/product/delete/{id}", productHandler)
 	router.HandleFunc("/product/new", CreateHandler)
-	router.HandleFunc("/product/{id}", GetHandler)
 	router.HandleFunc("/product/stop", stopGoRunHandler)
+	router.HandleFunc("/product/{id}", productHandler) // 最後にしておかないと、他のpathが取れない。
 }
 	

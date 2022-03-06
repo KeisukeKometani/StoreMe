@@ -10,45 +10,31 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func JsonDecode(r *http.Request, p *Product) {
+	decoder := json.NewDecoder(r.Body)
 
-// Restful API Handler for GET/:id return
+	err := decoder.Decode(&p)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func GetApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	// Read the record.
 	ReadRecord(db, p, id)
 }
 
-// Restful API Handler for GET all
 func GetAllApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product) {
-	// Read all records.
 	ReadAllRecords(db, products)
 }
 
-// Restful API Handler for POST
 func PostApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
-	// Read the body
-	decoder := json.NewDecoder(r.Body)
-
-	err := decoder.Decode(&p)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create the record.
+	JsonDecode(r, p)
 	CreateRecord(db, p)
-
 }
 
-// Restful API Handler for PUT/:id
 func PutApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	// Read the record.
 	ReadRecord(db, p, id)
-
-	// Read the body
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&p)
-	if err != nil {
-		log.Fatal(err)
-	}
+	JsonDecode(r, p)
 
 	// Check column present or not
 	if p.Name != "" {
@@ -64,17 +50,11 @@ func PutApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Produc
 		p.Image = p.Image
 	}
 
-	// Update the record.
 	UpdateRecord(db, p)
-
 }
 
-// Restful API Handler for DELETE/:id
 func DeleteApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	// Read the record.
 	ReadRecord(db, p, id)
-
-	// Update the DeletedAt column. time now.
 	DeleteRecord(db, p)
 
 }
@@ -87,12 +67,11 @@ func ApiHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	// connect to database
 	db := database.ConnectDatabase()
 
 	var product Product
 	var products []Product
-	// Switch the method
+
 	switch method {
 	case "GET":
 		if id == "" {
@@ -110,7 +89,6 @@ func ApiHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	// close database
 	defer db.Close()
 
 	// Convert product to JSON
