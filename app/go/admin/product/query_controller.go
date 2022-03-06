@@ -7,7 +7,7 @@ import (
 )
 
 // Read the record.
-func ReadRecord(db *sql.DB, p *Product, id string) {
+func readRecord(db *sql.DB, p *Product, id string) {
 	// Read existing records.
 	row := db.QueryRow("SELECT * FROM product WHERE id = ?", id)
 	if err := row.Scan(&p.ID, &p.Name, &p.Price, &p.Description, &p.Image, &p.CreatedAt, &p.UpdatedAt, &p.DeletedAt); err != nil {
@@ -16,7 +16,7 @@ func ReadRecord(db *sql.DB, p *Product, id string) {
 }
 
 // Read all records.
-func ReadAllRecords(db *sql.DB, products *[]Product) {
+func readAllRecords(db *sql.DB, products *[]Product) {
 	// Read existing records.
 	rows, err := db.Query("SELECT * FROM product")
 	if err != nil {
@@ -35,7 +35,7 @@ func ReadAllRecords(db *sql.DB, products *[]Product) {
 }
 
 // Create the record.
-func CreateRecord(db *sql.DB, p *Product) {
+func createRecord(db *sql.DB, p *Product) {
 	// Insert the record.
 	stmt, err := db.Prepare("INSERT INTO product (name, price, description, image) VALUES (?, ?, ?, ?)")
 	if err != nil {
@@ -48,7 +48,7 @@ func CreateRecord(db *sql.DB, p *Product) {
 }
 
 // Update the record.
-func UpdateRecord(db *sql.DB, p *Product) {
+func updateRecord(db *sql.DB, p *Product) {
 	// Update the record.
 	stmt, err := db.Prepare("UPDATE product SET name = ?, price = ?, description = ?, image = ? WHERE id = ?")
 	if err != nil {
@@ -62,7 +62,7 @@ func UpdateRecord(db *sql.DB, p *Product) {
 }
 
 // Delete the record.
-func DeleteRecord(db *sql.DB, p *Product) {
+func deleteRecord(db *sql.DB, p *Product) {
 	// Update the DeletedAt column. time now.
 	stmt, err := db.Prepare("UPDATE product SET deleted_at = ? WHERE id = ?")
 	if err != nil {

@@ -4,7 +4,7 @@ package main
 // And CRUD operations.
 import (
 	"net/http"
-	"example/online_shop/go/product"
+	"example/online_shop/go/admin/product"
 
 	"github.com/gorilla/mux"
 )
@@ -15,6 +15,9 @@ func main() {
 	//Call Handler
 	product.CallHandlers(router)
 	product.CallApiHandlers(router)
+
+	fs := http.FileServer(http.Dir("assets/"))
+	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fs))
 
 	http.ListenAndServe(":8080", router)
 }

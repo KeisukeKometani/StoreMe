@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func JsonDecode(r *http.Request, p *Product) {
+func jsonDecode(r *http.Request, p *Product) {
 	decoder := json.NewDecoder(r.Body)
 
 	err := decoder.Decode(&p)
@@ -19,22 +19,22 @@ func JsonDecode(r *http.Request, p *Product) {
 	}
 }
 
-func GetApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	ReadRecord(db, p, id)
+func getApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+	readRecord(db, p, id)
 }
 
-func GetAllApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product) {
-	ReadAllRecords(db, products)
+func getAllApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product) {
+	readAllRecords(db, products)
 }
 
-func PostApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
-	JsonDecode(r, p)
-	CreateRecord(db, p)
+func postApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
+	jsonDecode(r, p)
+	createRecord(db, p)
 }
 
-func PutApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	ReadRecord(db, p, id)
-	JsonDecode(r, p)
+func putApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+	readRecord(db, p, id)
+	jsonDecode(r, p)
 
 	// Check column present or not
 	if p.Name != "" {
@@ -50,17 +50,17 @@ func PutApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Produc
 		p.Image = p.Image
 	}
 
-	UpdateRecord(db, p)
+	updateRecord(db, p)
 }
 
-func DeleteApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
-	ReadRecord(db, p, id)
-	DeleteRecord(db, p)
+func deleteApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+	readRecord(db, p, id)
+	deleteRecord(db, p)
 
 }
 
 // ApiHandler common method for base
-func ApiHandler(w http.ResponseWriter, r *http.Request) {
+func apiHandler(w http.ResponseWriter, r *http.Request) {
 	// Get the method
 	method := r.Method
 
@@ -75,16 +75,16 @@ func ApiHandler(w http.ResponseWriter, r *http.Request) {
 	switch method {
 	case "GET":
 		if id == "" {
-			GetAllApiHandler(w, r, db, &products)
+			getAllApiHandler(w, r, db, &products)
 		} else {
-			GetApiHandler(w, r, db, &product, id)
+			getApiHandler(w, r, db, &product, id)
 		}
 	case "POST":
-		PostApiHandler(w, r, db, &product)
+		postApiHandler(w, r, db, &product)
 	case "PUT":
-		PutApiHandler(w, r, db, &product, id)
+		putApiHandler(w, r, db, &product, id)
 	case "DELETE":
-		DeleteApiHandler(w, r, db, &product, id)
+		deleteApiHandler(w, r, db, &product, id)
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
@@ -113,7 +113,7 @@ func ApiHandler(w http.ResponseWriter, r *http.Request) {
 
 // Call Handlers
 func CallApiHandlers(router *mux.Router) {
-	router.HandleFunc("/api/product", ApiHandler).Methods("GET")
-	router.HandleFunc("/api/product/{id}", ApiHandler).Methods("GET", "PUT", "DELETE")
-	router.HandleFunc("/api/product", ApiHandler).Methods("POST")
+	router.HandleFunc("/api/product", apiHandler).Methods("GET")
+	router.HandleFunc("/api/product/{id}", apiHandler).Methods("GET", "PUT", "DELETE")
+	router.HandleFunc("/api/product", apiHandler).Methods("POST")
 }
