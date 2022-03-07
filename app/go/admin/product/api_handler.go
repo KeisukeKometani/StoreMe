@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"example/online_shop/database"
 	"encoding/json"
-	"database/sql"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
 func jsonDecode(r *http.Request, p *Product) {
@@ -19,27 +19,28 @@ func jsonDecode(r *http.Request, p *Product) {
 	}
 }
 
-func getApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+func getApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
 	readRecord(db, p, id)
 }
 
-func getAllApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products *[]Product) {
+func getAllApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, products *[]Product) {
 	readAllRecords(db, products)
 }
 
-func postApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product) {
+func postApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product) {
 	jsonDecode(r, p)
 	createRecord(db, p)
 }
 
-func putApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+func putApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
 	readRecord(db, p, id)
 	jsonDecode(r, p)
 
-	updateRecord(db, p)
+	var update_product Product
+	updateRecord(db, p, update_product)
 }
 
-func deleteApiHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string) {
+func deleteApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
 	readRecord(db, p, id)
 	deleteRecord(db, p)
 
@@ -74,8 +75,6 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusBadRequest)
 	}
-
-	defer db.Close()
 
 	// Convert product to JSON
 	var b []byte

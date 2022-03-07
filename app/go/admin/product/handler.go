@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"html/template"
 	"strconv"
-	"database/sql"
 	"example/online_shop/database"
-	"example/online_shop/go/query"
 
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
 func renderCommon(w http.ResponseWriter, r *http.Request, data interface{}, fileNames ...string) {
@@ -21,42 +20,45 @@ func renderCommon(w http.ResponseWriter, r *http.Request, data interface{}, file
 	t.Execute(w, data)
 }
 
-func viewhandler(w http.ResponseWriter, r *http.Request, db *sql.DB, products []Product){
-	query.ReadAllRecords(db, products, "product")
-	log.Println("viewhandler: %p",products)
+func viewhandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, products []Product){
+	readAllRecords(db, &products)
 	renderCommon(w, r, products, "html/admin/product/view.html")
 }
 
-func getHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
-	query.ReadRecord(db, &p, id, "product")
+func getHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
+	readRecord(db, &p, id)
 	renderCommon(w, r, p, "html/admin/product/get.html", "html/template/_head.html")
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
-	query.ReadRecord(db, &p, id, "product")
+func editHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
+	readRecord(db, &p, id)
 	renderCommon(w, r, p, "html/admin/product/edit.html")
 }
 
-func saveHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p *Product, id string){
+func saveHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, id string){
+	var p Product
+	var update_product Product
+
 	price, _ := strconv.Atoi(r.FormValue("price"))
-	p.Name = r.FormValue("name")
-	p.Price = price
-	p.Description = r.FormValue("description")
-	p.Image = r.FormValue("image")
+	update_product.Name = r.FormValue("name")
+	update_product.Price = price
+	update_product.Description = r.FormValue("description")
+	update_product.Image = r.FormValue("image")
 
 	if id == "" {
-		createRecord(db, p)
+		createRecord(db, &p)
 	} else {
 		p.ID, _ = strconv.Atoi(id)
-		updateRecord(db, p)
+		updateRecord(db, &p, update_product)
 	}
 
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }
 
 // DeleteHandler(logic delete)
-func deleteHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, p Product, id string){
-	query.DeleteRecord(db, id, "product")
+func deleteHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
+	p.ID, _ = strconv.Atoi(id)
+	deleteRecord(db, &p)
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }
 
@@ -89,16 +91,15 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	case "edit/"+id:
 		editHandler(w, r, db, product, id)
 	case "save/"+id:
-		saveHandler(w, r, db, &product, id)
+		saveHandler(w, r, db, id)
 	case "save/":
-		saveHandler(w, r, db, &product, id)
+		saveHandler(w, r, db, id)
 	case "delete/"+id:
 		deleteHandler(w, r, db, product, id)
 	case "new":
 		createHandler(w, r)
 	}
 
-	defer db.Close()
 }
 
 // Call Handlers
