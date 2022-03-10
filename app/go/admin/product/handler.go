@@ -48,7 +48,8 @@ func saveHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, id string)
 	if id == "" {
 		createRecord(db, &p)
 	} else {
-		p.ID, _ = strconv.Atoi(id)
+		id_int, _ := strconv.Atoi(id)
+		p.ID = uint(id_int)
 		updateRecord(db, &p, update_product)
 	}
 
@@ -57,7 +58,8 @@ func saveHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, id string)
 
 // DeleteHandler(logic delete)
 func deleteHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
-	p.ID, _ = strconv.Atoi(id)
+	id_int, _ := strconv.Atoi(id)
+	p.ID = uint(id_int)
 	deleteRecord(db, &p)
 	http.Redirect(w, r, "/product/view", http.StatusFound)
 }

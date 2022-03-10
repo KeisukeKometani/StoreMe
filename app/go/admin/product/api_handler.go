@@ -3,6 +3,7 @@ package product
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"example/online_shop/database"
 	"encoding/json"
 
@@ -33,10 +34,12 @@ func postApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Prod
 }
 
 func putApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
-	readRecord(db, p, id)
-	jsonDecode(r, p)
-
+	id_int, _ := strconv.Atoi(id)
+	p.ID = uint(id_int)
+	
 	var update_product Product
+	jsonDecode(r, &update_product)
+
 	updateRecord(db, p, update_product)
 }
 
@@ -83,7 +86,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	if id == "" && method == "GET" {
 		b, err = json.Marshal(products)
 	} else {
-		b, err = json.Marshal(product)
+		b, err = json.Marshal(&product)
 	}
 	if err != nil {
 		log.Fatal(err)
