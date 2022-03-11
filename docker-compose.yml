@@ -1,14 +1,19 @@
 version: '3.9'
 services:
   app:
-    image: golang:latest
+    build:
+      context: .
+      dockerfile: ./.containers/go/Dockerfile
     container_name: app
     tty: true
     volumes:
       - ./app:/go/src/app
+      - gobin:/go/bin
     working_dir: /go/src/app
     ports:
     - "8080:8080"
+    command: sh -c air
+
   db:
     image: mysql:latest
     container_name: online_shop_db
@@ -28,3 +33,4 @@ services:
       - 3316:3306
 volumes:
   mysql:
+  gobin:
