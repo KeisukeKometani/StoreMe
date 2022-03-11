@@ -1,3 +1,6 @@
+# Online Shop
+
+```go
 // gorm.Modelの定義
 type Model struct {
   ID        uint           `gorm:"primaryKey"`
@@ -5,3 +8,60 @@ type Model struct {
   UpdatedAt time.Time
   DeletedAt gorm.DeletedAt `gorm:"index"`
 }
+```
+
+## Build a Development Env
+
+### Requirements
+
+- Docker
+- docker-compose
+
+### Alternative requirement
+
+- make
+- dip (Ruby gem)
+    - ruby
+
+## Startup of local environment
+
+### Using make
+
+```sh
+make provision
+make up
+```
+
+Or, if you want it to run in the background, use the command below.
+
+```sh
+make provision
+make upd
+```
+
+### Using dip (*not working at moment*)
+
+```sh
+dip provision
+dip up
+```
+
+## Access to the application
+
+Go to the following URL with your browser.
+
+http://localhost:8080/
+
+## Shutdown or cleanup of local environment
+
+### down
+
+```sh
+make down
+```
+
+### Cleanup all docker images, volumes and orphans
+
+```sh
+make downall
+```
