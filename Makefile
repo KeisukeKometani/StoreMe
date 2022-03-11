@@ -30,7 +30,7 @@ downall:
 #####################################################
 .PHONY: gosh gotidy
 gosh:
-	${COMMON_COMPOSE} run --rm app bash
+	${COMMON_COMPOSE} run --rm app ash
 
 gotidy:
 	${COMMON_COMPOSE} run --rm app sh -c 'go mod tidy'
