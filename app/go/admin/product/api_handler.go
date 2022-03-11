@@ -3,8 +3,8 @@ package product
 import (
 	"log"
 	"net/http"
-	"strconv"
 	"example/online_shop/database"
+	"example/online_shop/go/lib"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
@@ -21,31 +21,27 @@ func jsonDecode(r *http.Request, p *Product) {
 }
 
 func getApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
-	readRecord(db, p, id)
+	db.First(p, id)
 }
 
 func getAllApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, products *[]Product) {
-	readAllRecords(db, products)
+	db.Find(products)
 }
 
 func postApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product) {
-	jsonDecode(r, p)
-	createRecord(db, p)
+	lib.JsonDecode(r, p)
+	db.Create(p)
 }
 
 func putApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
-	id_int, _ := strconv.Atoi(id)
-	p.ID = uint(id_int)
-	
-	var update_product Product
-	jsonDecode(r, &update_product)
-
-	updateRecord(db, p, update_product)
+	lib.JsonDecode(r, p)
+	p.ID = lib.Atoui(id)
+	db.Model(&p).Updates(&p)
 }
 
 func deleteApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
-	readRecord(db, p, id)
-	deleteRecord(db, p)
+	p.ID = lib.Atoui(id)
+	db.Delete(&p)
 
 }
 
