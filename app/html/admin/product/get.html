@@ -2,36 +2,36 @@
 <html>
 {{template "head" .}}
 <body>
-    <a href="#" onclick="history.back(-1);return false;">戻る</a>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>DeletedAt</th>
-                <th>edit</th>
-                <th>delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{.ID}}</td>
-                <td>{{.Name}}</td>
-                <td>{{.Price}}</td>
-                <td>{{.Description}}</td>
-                <td>{{.Image}}</td>
-                <td>{{.CreatedAt}}</td>
-                <td>{{.UpdatedAt}}</td>
-                <td>{{.DeletedAt}}</td>
-                <td><a href="/product/edit/{{.ID}}">edit</a></td>
-                <td><a href="/product/delete/{{.ID}}">delete</a></td>
-            </tr>
-        </tbody>
-    </table>
+    {{template "header" .}}
+    <div class="container-fluid">
+        <div class="row m-3">
+            <div class="col-1">
+                <a class="btn btn-primary w-100" href="/product/edit/{{.ID}}">編集</a>
+            </div>
+            <div class="col-1">
+                <a class="btn btn-danger w-100" href="/product/delete/{{.ID}}">削除</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col table-responsive">
+                <table class="table table-bordered align-middle">
+                    <tr>
+                        <th class="table-dark">ID</th><td>{{.ID}}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-dark">Name</th><td>{{.Name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-dark">Price</th><td>{{.Price}}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-dark">Description</th><td>{{.Description}}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-dark">Image</th><td>{{.Image}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 </body>
 </html>

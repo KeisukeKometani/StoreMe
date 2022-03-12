@@ -17,7 +17,7 @@ func viewhandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, products [
 
 func getHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
 	db.First(&p, id)
-	lib.RenderCommon(w, r, p, "html/admin/product/get.html", "html/template/_head.html")
+	lib.RenderCommon(w, r, p, "html/admin/product/get.html")
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p Product, id string){
