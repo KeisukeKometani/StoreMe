@@ -1,6 +1,17 @@
 # Online Shop
 
+## Model rule
+
+Always include gorm.Model
 ```go
+type Product struct {
+	gorm.Model
+	Name	  string  `json:"name" `
+	Price	  int  `json:"price" `
+	Description string  `json:"description" `
+	Image	  string  `json:"image" `
+}
+
 // gorm.Modelの定義
 type Model struct {
   ID        uint           `gorm:"primaryKey"`
