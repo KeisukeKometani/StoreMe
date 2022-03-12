@@ -57,7 +57,8 @@ func createHandler(w http.ResponseWriter, r *http.Request){
 // Handler common methods
 func productHandler(w http.ResponseWriter, r *http.Request) {
 	
-	path := r.URL.Path[len("/product/"):]
+	path := r.URL.Path[len("/product"):]
+	method := r.Method
 
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -67,20 +68,23 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	var product Product
 	var products []Product
 	switch path {
-	case "view":
+	case "/view":
 		viewhandler(w, r, db, products)
-	case id:
-		getHandler(w, r, db, product, id)
-	case "edit/"+id:
-		editHandler(w, r, db, product, id)
-	case "save/"+id:
-		saveHandler(w, r, db, product, id)
-	case "save/":
-		saveHandler(w, r, db, product, id)
-	case "delete/"+id:
-		deleteHandler(w, r, db, product, id)
-	case "new":
+	case "/new":
 		createHandler(w, r)
+	case "/"+id:
+		switch method {
+		case "GET":
+			getHandler(w, r, db, product, id)
+		case "POST":
+			saveHandler(w, r, db, product, id)
+		}
+	case "/edit/"+id:
+		editHandler(w, r, db, product, id)
+	case "/delete/"+id:
+		deleteHandler(w, r, db, product, id)
+	case "":
+		saveHandler(w, r, db, product, id)
 	}
 
 }
@@ -88,11 +92,10 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 // Call Handlers
 func CallHandlers(router *mux.Router) {
 	router.HandleFunc("/product/view", productHandler)
-	router.HandleFunc("/product/edit/{id}", productHandler)
-	router.HandleFunc("/product/save/{id}", productHandler)
-	router.HandleFunc("/product/save/", productHandler)
-	router.HandleFunc("/product/delete/{id}", productHandler)
 	router.HandleFunc("/product/new", createHandler)
-	router.HandleFunc("/product/{id}", productHandler) // 最後にしておかないと、他のpathが取れない。
+	router.HandleFunc("/product/edit/{id}", productHandler)
+	router.HandleFunc("/product/delete/{id}", productHandler)
+	router.HandleFunc("/product/{id}", productHandler).Methods("GET", "POST") // 最後にしておかないと、他のpathが取れない。
+	router.HandleFunc("/product", productHandler).Methods("POST")
 }
 	
