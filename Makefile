@@ -58,6 +58,9 @@ migrate_up:
 migrate_down:
 	make migrate ARG=down
 
+migrate_force:
+	make migrate ARG=force ${VER}
+
 #####################################################
 # Misc
 #####################################################
