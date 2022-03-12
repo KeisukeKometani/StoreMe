@@ -95,7 +95,7 @@ func CallHandlers(router *mux.Router) {
 	router.HandleFunc("/product/new", createHandler)
 	router.HandleFunc("/product/edit/{id}", productHandler)
 	router.HandleFunc("/product/delete/{id}", productHandler)
-	router.HandleFunc("/product/{id}", productHandler).Methods("GET", "POST") // 最後にしておかないと、他のpathが取れない。
+	router.HandleFunc("/product/{id}", productHandler).Methods("GET", "POST")
 	router.HandleFunc("/product", productHandler).Methods("POST")
 }
 	
