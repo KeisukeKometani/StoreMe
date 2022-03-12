@@ -1,24 +1,14 @@
 package product
 
 import (
-	"log"
 	"net/http"
-	"example/online_shop/database"
+	"example/online_shop/go/database"
 	"example/online_shop/go/lib"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
-
-func jsonDecode(r *http.Request, p *Product) {
-	decoder := json.NewDecoder(r.Body)
-
-	err := decoder.Decode(&p)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func getApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
 	db.First(p, id)
@@ -29,12 +19,12 @@ func getAllApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, produ
 }
 
 func postApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product) {
-	lib.JsonDecode(r, p)
+	lib.JsonDecodeRequestBody(r, p)
 	db.Create(p)
 }
 
 func putApiHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB, p *Product, id string) {
-	lib.JsonDecode(r, p)
+	lib.JsonDecodeRequestBody(r, p)
 	p.ID = lib.Atoui(id)
 	db.Model(&p).Updates(&p)
 }
@@ -84,9 +74,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		b, err = json.Marshal(&product)
 	}
-	if err != nil {
-		log.Fatal(err)
-	}
+	lib.ErrorCheck(err)
 	
 	// Write JSON to response
 	w.Header().Set("Content-Type", "application/json")

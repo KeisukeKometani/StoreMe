@@ -3,7 +3,7 @@ package product
 import (
 	"net/http"
 	"strconv"
-	"example/online_shop/database"
+	"example/online_shop/go/database"
 	"example/online_shop/go/lib"
 
 	"github.com/gorilla/mux"

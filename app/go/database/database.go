@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"example/online_shop/go/lib"
 
 	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
@@ -16,9 +17,7 @@ func ConnectDatabase() *gorm.DB{
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: sqlDB,
 	}), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
+	lib.ErrorCheck(err)
 
 	return db
 }
