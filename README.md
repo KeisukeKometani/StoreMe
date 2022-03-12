@@ -46,6 +46,38 @@ dip provision
 dip up
 ```
 
+## Migration DB
+
+Migration files are located at db/migrate directory.
+
+### Execute Migrates
+
+#### Migrate up (CREATE TABLE etc..)
+
+```sh
+make migrate_up
+```
+
+#### Migrate down (DROP TABLE etc...)
+
+```sh
+make migrate_down
+```
+
+#### Migrate force
+
+example:
+```sh
+make migrate_force VER=20220312013850
+```
+
+### Create new Migrate file
+
+example:
+```sh
+make migrate_g NAME=create_products_table
+```
+
 ## Access to the application
 
 Go to the following URL with your browser.
