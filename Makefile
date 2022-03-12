@@ -34,3 +34,33 @@ gosh:
 
 gotidy:
 	${COMMON_COMPOSE} run --rm app sh -c 'go mod tidy'
+
+#####################################################
+# DB
+#####################################################
+.PHONY: dbc
+dbc:
+	${COMMON_COMPOSE} run --rm db mysql -h online_shop_db -u root -p
+
+#####################################################
+# DB Migration
+#####################################################
+.PHONY: migrate_g migrate migrate_up migrate_down
+migrate_g:
+	${COMMON_COMPOSE} run --rm db_migrate g ${NAME} 
+
+migrate:
+	${COMMON_COMPOSE} run --rm db_migrate migrate ${ARG}
+
+migrate_up:
+	make migrate ARG=up
+
+migrate_down:
+	make migrate ARG=down
+
+#####################################################
+# Misc
+#####################################################
+# Fix permission
+fixperm:
+	sudo chown -R $(shell whoami):$(shell whoami) .
