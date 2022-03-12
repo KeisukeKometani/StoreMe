@@ -1,4 +1,11 @@
 version: '3.9'
+
+x-env-db-connections: &dbenvs
+  MYSQL_ROOT_PASSWORD: "1234"
+  MYSQL_DATABASE: online_shop
+  MYSQL_USER: dev
+  MYSQL_PASSWORD: "passwd"
+
 services:
   app:
     build:
@@ -18,11 +25,7 @@ services:
     image: mysql:latest
     container_name: online_shop_db
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
-    environment:
-      MYSQL_ROOT_PASSWORD: "1234"
-      MYSQL_DATABASE: online_shop
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: "passwd"
+    environment: *dbenvs
     volumes:
       - mysql:/var/lib/mysql
       - .dockerdev/mysql-initdb.d:/docker-entrypoint-initdb.d
@@ -31,6 +34,24 @@ services:
       interval: 5s
     ports:
       - 3316:3306
+
+  db_migrate:
+    build:
+      context: .
+      dockerfile: ./.containers/db_migrate/Dockerfile
+    environment:
+      <<: *dbenvs
+      # root ---
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+      # --------
+      MYSQL_HOST: online_shop_db
+      MYSQL_PORT: 3306
+    volumes:
+      - ./db:/db
+    working_dir: /db
+    command: noop
+
 volumes:
   mysql:
   gobin:
