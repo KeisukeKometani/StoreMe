@@ -97,7 +97,6 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 // Call Handlers
 func CallApiHandlers(router *mux.Router) {
-	router.HandleFunc("/api/product", apiHandler).Methods("GET")
 	router.HandleFunc("/api/product/{id}", apiHandler).Methods("GET", "PUT", "DELETE")
-	router.HandleFunc("/api/product", apiHandler).Methods("POST")
+	router.HandleFunc("/api/product", apiHandler).Methods("GET","POST")
 }
