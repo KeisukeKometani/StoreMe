@@ -5,13 +5,18 @@ package main
 import (
 	"net/http"
 	"example/online_shop/go/admin/product"
+	"example/online_shop/go/lib"
+	"example/online_shop/go/database/connect"
+	"example/online_shop/go/routes"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
 	router := mux.NewRouter()
+	lib.SetDBConnecter(connect.DBConnect{})
 
+	routes.SetupRoutes(router);
 	//Call Handler
 	product.CallHandlers(router)
 	product.CallApiHandlers(router)
