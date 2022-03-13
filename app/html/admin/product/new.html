@@ -1,19 +1,31 @@
 <!-- new template -->
 <html>
-<head>
-    <title>New</title>
-</head>
+{{template "head" .}}
 <body>
-    <a href="#" onclick="history.back(-1);return false;">戻る</a>
-    <form action="/product" method="POST">
-        <label for="name">Name</label>
-        <input type="text" name="name">
-        <label for="price">Price</label>
-        <input type="text" name="price">
-        <label for="description">Description</label>
-        <input type="text" name="description">
-        <label for="image">Image</label>
-        <input type="text" name="image">
-        <input type="submit" value="Submit">
-    </form>
+    {{template "header" .}}
+    <div class="container-fluid">
+        <div class="row m-3">
+            <form action="/product" method="POST">
+                <div class="col-12 mb-3">
+                    <label for="name" class="form-label">商品名</label>
+                    <input type="text" class="form-control" name="name">
+                </div>             
+                <div class="col-12 mb-3">
+                    <label for="price" class="form-label">価格</label>
+                    <input type="text" class="form-control" name="price">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="description" class="form-label">説明</label>
+                    <input type="text" class="form-control" name="description">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="image" class="form-label">商品画像</label>
+                    <input type="text" class="form-control" name="image">
+                </div>
+                <div class="col-12 mb-3">
+                    <button type="submit" class="btn btn-primary mt-3">登録</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </html>

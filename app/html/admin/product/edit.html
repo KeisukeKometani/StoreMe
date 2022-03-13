@@ -1,21 +1,35 @@
 <!-- edit template-->
 <html>
-<head>
-    <title>Edit</title>
-</head>
+{{template "head" .}}
 <body>
-    <a href="#" onclick="history.back(-1);return false;">戻る</a>
-    <form action="/product/{{.ID}}" method="POST">
-        <input type="hidden" name="id" value="{{.ID}}">
-        <label for="name">Name</label>
-        <input type="text" name="name" value="{{.Name}}">
-        <label for="price">Price</label>
-        <input type="text" name="price" value="{{.Price}}">
-        <label for="description">Description</label>
-        <input type="text" name="description" value="{{.Description}}">
-        <label for="image">Image</label>
-        <input type="text" name="image" value="{{.Image}}">
-        <input type="submit" value="Submit">
-    </form>
+    {{template "header" .}}
+    <div class="container-fluid">
+        <div class="row m-3">
+            <form action="/product/{{.ID}}" method="POST">
+                <div class="col-12">
+                    <input type="hidden" name="id" value="{{.ID}}">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="name" class="form-label">商品名</label>
+                    <input type="text" class="form-control" name="name" value="{{.Name}}">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="price" class="form-label">価格</label>
+                    <input type="text" class="form-control" name="price" value="{{.Price}}">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="description" class="form-label">商品説明</label>
+                    <input type="text" class="form-control" name="description" value="{{.Description}}">
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="image" class="form-label">商品画像</label>
+                    <input type="text" class="form-control" name="image" value="{{.Image}}">
+                </div>
+                <div class="col-12 mb-3">
+                    <button type="submit" class="btn btn-primary mt-3">更新</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
