@@ -3,7 +3,6 @@ package product
 import (
 	"net/http"
 	"strconv"
-	"example/online_shop/go/database"
 	"example/online_shop/go/lib"
 
 	"github.com/gorilla/mux"
@@ -63,7 +62,8 @@ func productHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	
-	db := database.ConnectDatabase()
+	//db := database.ConnectDatabase()
+	db := lib.GetDBInstance()
 
 	var product Product
 	var products []Product
