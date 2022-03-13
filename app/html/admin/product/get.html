@@ -3,15 +3,18 @@
 {{template "head" .}}
 <body>
     {{template "header" .}}
-    <div class="container-fluid">
-        <div class="row m-3">
-            <div class="col-1">
-                <a class="btn btn-primary w-100" href="/product/edit/{{.ID}}">編集</a>
-            </div>
-            <div class="col-1">
-                <a class="btn btn-danger w-100" href="/product/delete/{{.ID}}">削除</a>
+    <div class="container-fluid" id="product-get">   
+        <div class="row my-3">
+            <div class="col">
+                <h1>{{.Name}}</h1>
             </div>
         </div>
+        <div class="row my-3">
+            <div class="col">
+                <img src="/assets/image/{{.Image}}" class="product-image">
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col table-responsive">
                 <table class="table table-bordered align-middle">
@@ -31,6 +34,14 @@
                         <th class="table-dark">Image</th><td>{{.Image}}</td>
                     </tr>
                 </table>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-1">
+                <a class="btn btn-primary w-100" href="/product/edit/{{.ID}}">編集</a>
+            </div>
+            <div class="col-1">
+                <a class="btn btn-danger w-100" href="/product/delete/{{.ID}}">削除</a>
             </div>
         </div>
 </body>
