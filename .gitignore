@@ -1,2 +1,6 @@
 # temp directory
 app/tmp/*
+node_modules/*
+nodejs/dist/*
+nodejs/out-tsc/*
+nodejs/yarn-error.log

@@ -52,6 +52,28 @@ services:
     working_dir: /db
     command: noop
 
+  nodejs:
+    build:
+      context: .
+      dockerfile: ./.containers/nodejs/Dockerfile
+    environment:
+      # avoid Webpack5 openssl issue
+      NODE_OPTIONS: --openssl-legacy-provider
+    tty: true
+    volumes:
+      - ./nodejs:/nodejs
+      - nodemodule:/nodejs/node_modules
+    working_dir: /nodejs
+    ports:
+      # Storybook
+      - 6006:6006
+      # Rollup Serve
+      - 8082:8082
+      # Rollup Serve Live Reload
+      - 8090:8090
+    command: yarn devserve
+
 volumes:
   mysql:
   gobin:
+  nodemodule:
