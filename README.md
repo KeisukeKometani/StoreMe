@@ -36,6 +36,24 @@ dip provision
 dip up
 ```
 
+## NodeJS (Frontend)
+
+### install nodejs packages
+
+```sh
+make yarninstall
+```
+
+### Node endpoints
+
+#### Dev for frontend
+
+http://localhost:8082/
+
+#### Storybook
+
+http://localhost:6006/
+
 ## Migration DB
 
 Migration files are located at db/migrate directory.
