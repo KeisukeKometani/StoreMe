@@ -6,7 +6,7 @@ COMMON_COMPOSE=docker-compose -f docker-compose.yml
 #####################################################
 .PHONY: provision build up upd down downall
 PROVISION_APP=go install github.com/cosmtrek/air@v1.29.0
-provision: build gotidy nodesh
+provision: build gotidy yarninstall
 	${COMMON_COMPOSE} run --rm app sh -c '${PROVISION_APP}'
 
 build:
