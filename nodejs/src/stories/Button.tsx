@@ -19,6 +19,10 @@ interface ButtonProps {
    */
   label: string;
   /**
+   * Button curner radius 
+   */
+  round?: 0 | 5 | 10 | 25;
+  /**
    * Optional click handler
    */
   onClick?: () => void;
@@ -31,6 +35,7 @@ export const Button = ({
   primary = false,
   size = 'medium',
   backgroundColor,
+  round = 25,
   label,
   ...props
 }: ButtonProps) => {
@@ -38,7 +43,7 @@ export const Button = ({
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
+      className={['storybook-button' ,`storybook-button--${size}`, `storybook-button--round${round}`, mode].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >

@@ -14,6 +14,7 @@ export const Page: React.VFC = () => {
     <article>
       <Header
         user={user}
+        backgroundColor="#212529"
         onLogin={() => setUser({ name: 'Jane Doe' })}
         onLogout={() => setUser(undefined)}
         onCreateAccount={() => setUser({ name: 'Jane Doe' })}

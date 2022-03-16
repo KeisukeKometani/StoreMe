@@ -39,3 +39,9 @@ Small.args = {
   size: 'small',
   label: 'Button',
 };
+
+export const Round = Template.bind({});
+Round.args = {
+  round: 0,
+  label: 'Button',
+};

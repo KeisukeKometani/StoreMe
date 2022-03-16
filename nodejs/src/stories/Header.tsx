@@ -9,14 +9,21 @@ type User = {
 
 interface HeaderProps {
   user?: User;
+  backgroundColor?: string;
   onLogin: () => void;
   onLogout: () => void;
   onCreateAccount: () => void;
 }
 
-export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps) => (
+export const Header = ({ 
+  user,
+  backgroundColor,
+  onLogin,
+  onLogout,
+  onCreateAccount
+}: HeaderProps) => (
   <header>
-    <div className="wrapper">
+    <div className="wrapper" style={{ backgroundColor }}>
       <div>
         <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" fillRule="evenodd">
@@ -34,7 +41,7 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
             />
           </g>
         </svg>
-        <h1>Acme</h1>
+        <h1>Online Shop</h1>
       </div>
       <div>
         {user ? (
@@ -42,12 +49,32 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
             <span className="welcome">
               Welcome, <b>{user.name}</b>!
             </span>
-            <Button size="small" onClick={onLogout} label="Log out" />
+            <Button
+              backgroundColor="#C70044"
+              size="small"
+              label="ログアウト"
+              onClick={onLogout}
+              primary
+              round="5"
+            />
           </>
         ) : (
           <>
-            <Button size="small" onClick={onLogin} label="Log in" />
-            <Button primary size="small" onClick={onCreateAccount} label="Sign up" />
+            <Button
+              backgroundColor="transparent"
+              size="small"
+              label="ログイン"
+              onClick={onLogin}
+              primary
+              round="5"
+            />
+            <Button
+              size="small"
+              label="新規登録"
+              onClick={onCreateAccount}
+              primary
+              round="5"
+            />
           </>
         )}
       </div>
