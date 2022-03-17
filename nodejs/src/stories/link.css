@@ -23,7 +23,17 @@
   box-sizing: border-box;
 }
 
+.storybook-link--small {
+  font-size: 12px;
+  padding: 10px 16px;
+}
+
 .storybook-link--medium {
   font-size: 14px;
   padding: 11px 20px;
+}
+
+.storybook-link--large {
+  font-size: 16px;
+  padding: 12px 24px;
 }

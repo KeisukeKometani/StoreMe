@@ -12,5 +12,6 @@ const Template: ComponentStory<typeof Nav> = (args) => <Nav {...args} />;
 
 export const MainNav = Template.bind({});
 MainNav.args = {
+  actives: [false, false, false, false],
   col: 12,
 };

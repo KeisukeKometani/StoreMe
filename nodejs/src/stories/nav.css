@@ -1,6 +1,16 @@
 .storybook-nav {
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.storybook-nav .storybook-link {
+  font-weight: normal;
+}
+
+.storybook-nav .storybook-link.storybook-link--active {
+  border-bottom-color: orange;
+  color: #6c757d!important;
 }
