@@ -2,8 +2,11 @@
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 18px;
   display: flex;
+  justify-self: flex-end;
   align-items: center;
   justify-content: space-between;
+  background-color: #212529;
+  ;
 }
 
 .storybook-nav .storybook-link {

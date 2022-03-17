@@ -16,7 +16,7 @@ interface UlProps {
   onMenu4: () => void;
 }
 
-export const Ul = ({ 
+export const Ul = ({
   primary = false,
   size = 'medium',
   titles,
@@ -28,8 +28,8 @@ export const Ul = ({
   onMenu4,
 }: UlProps) => {
   const mode = primary ? 'storybook-ul--primary' : 'storybook-ul--secondary';
-  return(
-    <ul className={['storybook-ul' ,mode].join(' ')}>
+  return (
+    <ul className={['storybook-ul', mode].join(' ')}>
       {
         <>
           <Link
