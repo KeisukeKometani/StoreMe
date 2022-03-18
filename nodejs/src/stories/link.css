@@ -6,20 +6,34 @@
   display: inline-block;
   line-height: 1;
 }
+
 .storybook-link--primary {
   color: white;
   background-color: #0b57d0;
 }
+
 .storybook-link--secondary {
   color: #333;
   background-color: transparent;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
 }
+
 .storybook-link--active {
   border-bottom: solid 2px;
   box-sizing: border-box;
 }
+
+.storybook-link--small {
+  font-size: 12px;
+  padding: 10px 16px;
+}
+
 .storybook-link--medium {
   font-size: 14px;
   padding: 11px 20px;
+}
+
+.storybook-link--large {
+  font-size: 16px;
+  padding: 12px 24px;
 }

@@ -6,6 +6,7 @@ import './ul.css';
 
 interface UlProps {
   primary?: boolean;
+  size?: 'small' | 'medium' | 'large';
   titles: string[];
   actives?: boolean[];
   backgroundColor?: string;
@@ -15,8 +16,9 @@ interface UlProps {
   onMenu4: () => void;
 }
 
-export const Ul = ({ 
+export const Ul = ({
   primary = false,
+  size = 'medium',
   titles,
   actives = [false, false, false, false],
   backgroundColor,
@@ -26,8 +28,8 @@ export const Ul = ({
   onMenu4,
 }: UlProps) => {
   const mode = primary ? 'storybook-ul--primary' : 'storybook-ul--secondary';
-  return(
-    <ul className={['storybook-ul' , mode].join(' ')}>
+  return (
+    <ul className={['storybook-ul', mode].join(' ')}>
       {
         <>
           <Link
@@ -35,6 +37,7 @@ export const Ul = ({
             backgroundColor={backgroundColor}
             onClick={onMenu1}
             primary={primary}
+            size={size}
             active={actives[0]}
           />
           <Link
@@ -42,6 +45,7 @@ export const Ul = ({
             backgroundColor={backgroundColor}
             onClick={onMenu2}
             primary={primary}
+            size={size}
             active={actives[1]}
           />
           <Link
@@ -49,6 +53,7 @@ export const Ul = ({
             backgroundColor={backgroundColor}
             onClick={onMenu3}
             primary={primary}
+            size={size}
             active={actives[2]}
           />
           <Link
@@ -56,6 +61,7 @@ export const Ul = ({
             backgroundColor={backgroundColor}
             onClick={onMenu4}
             primary={primary}
+            size={size}
             active={actives[3]}
           />
         </>
