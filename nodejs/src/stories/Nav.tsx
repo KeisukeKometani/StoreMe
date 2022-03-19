@@ -65,7 +65,7 @@ export const Nav = ({
               label="ログアウト"
               onClick={onLogout}
               primary
-              round="5"
+              round={5}
             />
           </>
         ) : (
@@ -76,14 +76,14 @@ export const Nav = ({
               label="ログイン"
               onClick={onLogin}
               primary
-              round="5"
+              round={5}
             />
             <Button
               size="small"
               label="新規登録"
               onClick={onCreateAccount}
               primary
-              round="5"
+              round={5}
             />
           </>
         )}

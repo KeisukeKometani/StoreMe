@@ -12,13 +12,7 @@ export const Page: React.VFC = () => {
 
   return (
     <article>
-      <Header
-        user={user}
-        backgroundColor="#212529"
-        onLogin={() => setUser({ name: 'Jane Doe' })}
-        onLogout={() => setUser(undefined)}
-        onCreateAccount={() => setUser({ name: 'Jane Doe' })}
-      />
+      <Header backgroundColor="#212529" />
 
       <section>
         <h2>Pages in Storybook</h2>
