@@ -19,7 +19,7 @@ upd:
 	${COMMON_COMPOSE} up -d
 
 down:
-	${COMMON_COMPOSE} down --volumes
+	${COMMON_COMPOSE} down
 
 # Remove image, Volumes, Networks and Orphans
 downall:
