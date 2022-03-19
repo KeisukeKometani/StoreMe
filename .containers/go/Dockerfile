@@ -4,4 +4,4 @@ ENV GOPATH /go
 ENV GO111MODULE on
 
 RUN apk update && \
-    apk --no-cache add git
+    apk --no-cache add git make
