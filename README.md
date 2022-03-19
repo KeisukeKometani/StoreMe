@@ -1,4 +1,4 @@
-# Online Shop
+# StoreMe
 
 ## Build a Development Env
 
