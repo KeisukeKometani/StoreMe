@@ -10,7 +10,7 @@ import replace from '@rollup/plugin-replace';
 import sass from 'rollup-plugin-sass';
 
 // TODO: プロダクション環境の場合の対応
-const baseConfig = createBasicConfig({developmentMode: true});
+const baseConfig = createBasicConfig({ developmentMode: true });
 
 export default merge(baseConfig, {
   //input: './out-tsc/src/index.js',
@@ -24,7 +24,7 @@ export default merge(baseConfig, {
     serve({
       open: true,
       verbose: true,
-      contentBase: ['','public'],
+      contentBase: ['', 'public'],
       host: '0.0.0.0',
       port: 8082
     }),
@@ -39,6 +39,8 @@ export default merge(baseConfig, {
       // TODO: プロダクション環境の場合の対応
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
-    sass()
+    sass({
+      output: 'dist/style.css',
+    })
   ]
 });
