@@ -35,6 +35,7 @@
     "rollup-plugin-import-css": "^3.0.3",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-sass": "^1.2.10",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-typescript2": "^0.31.2",
     "ts-node": "^10.7.0",

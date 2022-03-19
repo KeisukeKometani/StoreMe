@@ -7,6 +7,7 @@ import typescript from 'rollup-plugin-typescript2';
 import postcss from 'rollup-plugin-postcss';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
+import sass from 'rollup-plugin-sass';
 
 // TODO: プロダクション環境の場合の対応
 const baseConfig = createBasicConfig({developmentMode: true});
@@ -37,6 +38,7 @@ export default merge(baseConfig, {
     replace({
       // TODO: プロダクション環境の場合の対応
       'process.env.NODE_ENV': JSON.stringify('development'),
-    })
+    }),
+    sass()
   ]
 });
