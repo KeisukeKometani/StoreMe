@@ -1,5 +1,7 @@
 # temp directory
 app/tmp/*
+#app/bin/*
+#!app/bin/.keep
 node_modules/*
 nodejs/dist/*
 nodejs/out-tsc/*
