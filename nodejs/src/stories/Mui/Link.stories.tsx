@@ -1,39 +1,37 @@
-import React from 'react';
+import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { Link } from './Link';
 
 export default {
-  title: 'Example/Link',
+  title: 'Mui/Link',
   component: Link,
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
 } as ComponentMeta<typeof Link>;
 
 const Template: ComponentStory<typeof Link> = (args) => <Link {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  primary: true,
   label: 'Link',
+  color: 'primary',
 };
+
 
 export const Secondary = Template.bind({});
 Secondary.args = {
   label: 'Link',
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
+
+export const H1 = Template.bind({});
+H1.args = {
   label: 'Link',
+  variant: 'h1',
 };
 
-export const Active = Template.bind({});
-Active.args = {
-  active: true,
-  label: 'Link',
-};
 
+export const UnderLineHover = Template.bind({});
+UnderLineHover.args = {
+  label: 'Link',
+  underline: 'hover',
+};
