@@ -19,3 +19,18 @@ export const ViewInAr = Template.bind({});
 ViewInAr.args = {
   iconImageName: 'viewInAr',
 };
+
+export const Equalizer = Template.bind({});
+Equalizer.args = {
+  iconImageName: 'equalizer',
+};
+
+export const MenuBook = Template.bind({});
+MenuBook.args = {
+  iconImageName: 'menuBook',
+};
+
+export const Help = Template.bind({});
+Help.args = {
+  iconImageName: 'help',
+};
