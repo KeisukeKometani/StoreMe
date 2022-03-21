@@ -8,14 +8,8 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    'storybook-addon-material-ui5'
+    "@storybook/addon-interactions"
   ],
-  webpackFinal(config) {
-    delete config.resolve.alias['styled-components'];
-    delete config.resolve.alias['mui/styled-engine-sc'];
-    return config;
-  },
   "plugins": [
     new HardSourceWebpackPlugin()
   ],
