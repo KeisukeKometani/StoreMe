@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { MUIListItemButton } from './MUIListItemButton';
+import { ListItemButton } from './ListItemButton';
 
 export default {
-  title: 'StoreMe/MUIListItemButton',
-  component: MUIListItemButton,
-} as ComponentMeta<typeof MUIListItemButton>;
+  title: 'Mui/ListItemButton',
+  component: ListItemButton,
+} as ComponentMeta<typeof ListItemButton>;
 
-const Template: ComponentStory<typeof MUIListItemButton> = (args) => <MUIListItemButton {...args} />;
+const Template: ComponentStory<typeof ListItemButton> = (args) => <ListItemButton {...args} />;
 
 export const ProductAll = Template.bind({});
 ProductAll.args = {

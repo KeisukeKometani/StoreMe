@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { MUIListItemIcon } from './MUIListItemIcon';
+import { ListItemIcon } from './ListItemIcon';
 
 export default {
-  title: 'StoreMe/MUIListItemIcon',
-  component: MUIListItemIcon,
-} as ComponentMeta<typeof MUIListItemIcon>;
+  title: 'Mui/ListItemIcon',
+  component: ListItemIcon,
+} as ComponentMeta<typeof ListItemIcon>;
 
-const Template: ComponentStory<typeof MUIListItemIcon> = (args) => <MUIListItemIcon {...args} />;
+const Template: ComponentStory<typeof ListItemIcon> = (args) => <ListItemIcon {...args} />;
 
 export const Send = Template.bind({});
 Send.args = {

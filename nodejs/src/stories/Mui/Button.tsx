@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
+import MuiButton from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 
@@ -8,7 +8,7 @@ type colorTypes = 'inherit' | 'primary' | 'secondary' | 'success' | 'info' | 'wa
 type sizeTypes = 'small' | 'medium' | 'large';
 type IconImageTypes = 'NULL' | 'send' | 'viewInAr';
 
-interface MUIButtonProps {
+interface ButtonProps {
   label: string;
   variant?: variantTypes;
   disabled?: boolean;
@@ -21,7 +21,7 @@ interface MUIButtonProps {
   onclick?: () => void;
 }
 
-export const MUIButton = ({
+export const Button = ({
   label,
   variant = 'contained',
   disabled = false,
@@ -32,12 +32,12 @@ export const MUIButton = ({
   startIconImageType,
   endIconImageType,
   ...props
-}: MUIButtonProps) => {
+}: ButtonProps) => {
   const startIcon = iconImage(startIconImageType);
   const endIcon = iconImage(endIconImageType);
 
   return (
-    <Button
+    <MuiButton
       variant={variant}
       disabled={disabled}
       href={href}
@@ -49,7 +49,7 @@ export const MUIButton = ({
       {...props}
     >
       {label}
-    </Button>
+    </MuiButton>
   );
 }
 

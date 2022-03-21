@@ -4,15 +4,19 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
-import { MUIListItemIcon } from './MUIListItemIcon'
-import { ProductsContent } from './ProductsContent';
+import { ListItemIcon } from '../Mui/ListItemIcon'
 
-interface MUITabsProps {
+interface TabsProps {
   labels: string[];
   icons: string[];
+  tabPanelContents: React.ReactNode[];
 }
 
-export const MUITabs = ({ labels, icons }: MUITabsProps) => {
+export const Tabs = ({ 
+  labels,
+  icons,
+  tabPanelContents,
+ }: TabsProps) => {
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -26,16 +30,18 @@ export const MUITabs = ({ labels, icons }: MUITabsProps) => {
           {labels.map((label, i) => (
             <Tab
               label={label}
-              icon={<MUIListItemIcon iconImageName={ icons[i] } />}
+              icon={<ListItemIcon iconImageName={ icons[i] } />}
               iconPosition="start"
               value={`${i + 1}`}
             />
           ))}
         </TabList>
       </Box>
-      <TabPanel value="1">
-        <ProductsContent />
-      </TabPanel>
+      {labels.map((label, i) => (
+        <TabPanel value={`${i + 1}`}>
+          {tabPanelContents[i]}
+        </TabPanel>
+      ))}
     </TabContext>
   );
 };

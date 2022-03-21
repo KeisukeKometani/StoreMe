@@ -1,11 +1,11 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+import MuiLink from '@mui/material/Link';
 
 type variantTypes = 'body1' | 'body2' | 'button' | 'caption' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'inherit' | 'overline' | 'subtitle1' | 'subtitle2';
 type colorTypes = 'inherit' | 'primary' | 'secondary';
 type underlineTypes = 'none' | 'hover' | 'always';
 
-interface MUILinkProps {
+interface LinkProps {
   label: string;
   variant?: variantTypes;
   href?: string;
@@ -14,16 +14,16 @@ interface MUILinkProps {
   onclick?: () => void;
 }
 
-export const MUILink = ({
+export const Link = ({
   label,
   variant = 'body1',
   href,
   color = 'inherit',
   underline = 'hover',
   ...props
-}: MUILinkProps) => {
+}: LinkProps) => {
   return (
-    <Link
+    <MuiLink
       variant={variant}
       href={href}
       color={color}
@@ -31,6 +31,6 @@ export const MUILink = ({
       {...props}
     >
       {label}
-    </Link>
+    </MuiLink>
   );
 }

@@ -1,24 +1,24 @@
 import * as React from 'react';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import MuiListItemIcon from '@mui/material/ListItemIcon';
 import SendIcon from '@mui/icons-material/Send';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HelpIcon from '@mui/icons-material/Help';
 
-interface MUIListItemIconProps {
+interface ListItemIconProps {
   iconImageName: 'string';
 }
 
-export const MUIListItemIcon = ({
+export const ListItemIcon = ({
   iconImageName,
-}: MUIListItemIconProps) => {
+}: ListItemIconProps) => {
   const icon = iconImage(iconImageName);
 
   return (
-    <ListItemIcon>
+    <MuiListItemIcon>
       {icon}
-    </ListItemIcon>
+    </MuiListItemIcon>
   );
 }
 
