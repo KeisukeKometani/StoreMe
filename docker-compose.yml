@@ -65,13 +65,8 @@ services:
       - nodemodule:/nodejs/node_modules
     working_dir: /nodejs
     ports:
-      # Storybook
-      - 6006:6006
-      # Rollup Serve
-      - 8082:8082
-      # Rollup Serve Live Reload
-      - 8090:8090
-    command: yarn devserve
+      - "3000:3000"
+    command: sh -c "yarn dev"
 
 volumes:
   mysql:
