@@ -4,3 +4,4 @@ node_modules/*
 nodejs/dist/*
 nodejs/out-tsc/*
 nodejs/yarn-error.log
+nodejs/src/node_modules/*
