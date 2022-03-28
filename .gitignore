@@ -5,3 +5,5 @@ nodejs/dist/*
 nodejs/out-tsc/*
 nodejs/yarn-error.log
 nodejs/src/node_modules/*
+nodejs/.next/cache/*
+nodejs/.next/static/*
