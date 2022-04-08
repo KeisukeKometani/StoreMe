@@ -65,8 +65,9 @@ services:
       - nodemodule:/nodejs/node_modules
     working_dir: /nodejs
     ports:
-      - "3000:3000"
-    command: sh -c "yarn dev"
+      - 3000:3000
+      - 6006:6006
+    command: yarn devserve
 
 volumes:
   mysql:
